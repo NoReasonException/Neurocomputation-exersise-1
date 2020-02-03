@@ -24,7 +24,7 @@ class NeuralNetwork:
         return True
 
 
-    def getNthLayerOutput(self,in_data:iter,n:int)->list:
+    def getNthLayerOutput(self,in_data:iter,n:int):
         """
         receives the output of n-1 layer and calculates the output of nth layer
         :param input: the output of n-1 layer , used as an input
@@ -36,14 +36,15 @@ class NeuralNetwork:
 
 
     def __call__(self, in_data,n:int):
-        result=in_data
+        result=[]
+        result.append(in_data.tolist())
         for i,everyLayer in enumerate(self.layers):
             if(i==0):
-                result=np.vstack([result,self.getNthLayerOutput(in_data,i)])
+                result.append(self.getNthLayerOutput(in_data,i))
             else:
-                result=np.vstack([result, self.getNthLayerOutput(result[-1], i)])
+                result.append(self.getNthLayerOutput(result[-1], i))
         return result[1:]
-    
+
 
 
 
@@ -63,7 +64,8 @@ class PerceptronsLayer:
         self.neurons_len=neurons_len
         self.input_len = input_len
         #self.weights = np.random.randint(0, 10, (neurons_len, input_len)) / 10
-        self.weights =np.array([[1,1],[1,1]])
+        self.weights = np.random.randint(1, 2, (neurons_len, input_len))
+        self.errortbl=None
 
     threesold = 0.3
 
@@ -126,18 +128,18 @@ class PerceptronsLayer:
         :return:                    the error table for this iteration
         """
 #        in_data = PerceptronsLayer.normalise_input_per_input(in_data)#add bias
-        errortbl = target_result - calculated_result
+        self.errortbl = target_result - calculated_result
         for everyCalculatedResult in range(len(calculated_result)):
             assert len(calculated_result) == len(target_result)
             assert len(self.weights[everyCalculatedResult])==len(in_data)
             assert len(self.weights)==self.neurons_len
-            correction = in_data*errortbl[everyCalculatedResult]*self.learn_rate
+            correction = in_data*self.errortbl[everyCalculatedResult]*self.learn_rate
             self.weights[everyCalculatedResult]=self.weights[everyCalculatedResult]+correction
-        return errortbl
+        return self.errortbl
 
 p1 = PerceptronsLayer(input_len=2,neurons_len=2,learn_rate=0.1)
-p2 = PerceptronsLayer(input_len=2,neurons_len=2,learn_rate=0.1)
-p3 = PerceptronsLayer(input_len=2,neurons_len=2,learn_rate=0.1)
+p2 = PerceptronsLayer(input_len=2,neurons_len=3,learn_rate=0.1)
+p3 = PerceptronsLayer(input_len=3,neurons_len=1,learn_rate=0.1)
 network = [p1,p2,p3]
 wrapper=NeuralNetwork(network)
 print(wrapper(np.array([2,2]),1))
