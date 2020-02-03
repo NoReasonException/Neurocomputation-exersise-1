@@ -1,4 +1,5 @@
 import numpy as np
 
-a=[10]*10
-print(a)
+b = np.array([1,1])
+b=b+np.array([-3.2,-3.2])
+print(b)
