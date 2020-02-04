@@ -188,7 +188,7 @@ class PerceptronsMultiLayer:
                 temp_delta.append(nextLayer.errortbl[eachNextLayersNeuron]*prev_weights[eachNextLayersNeuron][eachNeuron])
             temp_delta=calculated_result_table[eachNeuron]*(1-calculated_result_table[eachNeuron])*np.array(temp_delta).sum()
             #temp_delta=np.array(temp_delta).sum()
-            correction = temp_delta*self.learn_rate
+            correction = previous_layer_out* temp_delta*self.learn_rate
             self.errortbl.append(temp_delta)
             self.weights[eachNeuron]+=correction
             print(eachNeuron)
