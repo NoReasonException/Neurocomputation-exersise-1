@@ -191,7 +191,6 @@ class PerceptronsMultiLayer:
             correction = previous_layer_out* temp_delta*self.learn_rate
             self.errortbl.append(temp_delta)
             self.weights[eachNeuron]+=correction
-            print(eachNeuron)
 
         return retval
 
@@ -216,13 +215,28 @@ p2 = PerceptronsMultiLayer(input_len=2, neurons_len=1, learn_rate=0.5,index=1,we
 network = [p1,p2]
 wrapper=NeuralNetwork(network)
 
-epochs=70
+epochs=10000
 
 data=np.array([[0,0],[0,1],[1,0],[1,1]])
 target=np.array([[0],[1],[1],[0]])
 
-r=wrapper(np.array([0,0]))
 
-wrapper.adjust(np.array([0,0]),np.array([0]),r)
-print(p1.weights)
-print(p2.weights)
+
+def step(x):
+    return x
+    if(x>0.5):return 1
+    return 0
+for eachDataset in range(len(data)):
+    r = wrapper(data[eachDataset])
+    print(step(r[-1][0]))
+
+print("----------")
+for i in range(epochs):
+    for eachDataset in range(len(data)):
+        r = wrapper(data[eachDataset])
+        wrapper.adjust(data[eachDataset], target[eachDataset], r)
+
+for eachDataset in range(len(data)):
+    r = wrapper(data[eachDataset])
+    print(step(r[-1][0]))
+
