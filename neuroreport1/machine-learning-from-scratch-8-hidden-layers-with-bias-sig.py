@@ -51,19 +51,20 @@ class NeuralNetwork:
     def normalisation(in_data):
         return np.append(in_data, np.array([1]))  # plus bias input , always at 1
 
+    prev_weights=None
     def adjust(self,in_data,target_result,calculated_result):
-        self.errorTbl=[]
         for everyLayer in range(len(self.layers)-1,-1,-1): #traverse the list on reverse
             if(everyLayer==len(self.layers)-1):#we are in the last layer
-                self.errorTbl.append(self.layers[everyLayer].terminalAdjust(NeuralNetwork.normalisation(calculated_result[everyLayer - 1]), target_result,
+                prev_weights=(self.layers[everyLayer].terminalAdjust(NeuralNetwork.normalisation(calculated_result[everyLayer - 1]), target_result,
                                                                calculated_result[everyLayer]))
 
             elif(everyLayer==0):#we are in the first layer , and the input is the networks input
-                self.errorTbl.append(self.layers[everyLayer].middleAdjust(NeuralNetwork.normalisation(in_data), self.layers[everyLayer + 1]))
+                a=10
+                prev_weights=(self.layers[everyLayer].middleAdjust(NeuralNetwork.normalisation(in_data), self.layers[everyLayer + 1],prev_weights,calculated_result[everyLayer]))
                 continue
 
             else:#middle train
-                self.errorTbl.append(self.layers[everyLayer].middleAdjust(NeuralNetwork.normalisation(calculated_result[everyLayer-1]),self.layers[everyLayer+1]))
+                prev_weights=(self.layers[everyLayer].middleAdjust(NeuralNetwork.normalisation(calculated_result[everyLayer-1]),self.layers[everyLayer+1],prev_weights,calculated_result[everyLayer]))
                 continue
 
         return 1
@@ -149,21 +150,19 @@ class PerceptronsMultiLayer:
         assert len(previous_layer_out)==self.input_len+1
 
 
-
+        retval=np.array(self.weights)
         previous_layer_out=np.array(previous_layer_out)
         target_result=np.array(target_result)
         calculated_result_table = np.array(calculated_result_table)
-
-
         self.errortbl= (target_result-calculated_result_table)*(1-calculated_result_table)*calculated_result_table
         for everyNode in range(self.neurons_len):
             correction=previous_layer_out* self.errortbl[everyNode]*self.learn_rate
             self.weights[everyNode]+=correction
 
 
-        return self.errortbl
+        return retval
 
-    def middleAdjust(self,previous_layer_out,nextLayer):
+    def middleAdjust(self,previous_layer_out,nextLayer,prev_weights,calculated_result_table):
         """                     #next_layer_errortbl,next_layer_weights
              ---0----0
                  \  / \
@@ -177,6 +176,8 @@ class PerceptronsMultiLayer:
         :return:
         """
         self.errortbl=[]
+        retval=np.array(self.weights)
+        calculated_result_table=np.array(calculated_result_table)
         previous_layer_out=np.array(previous_layer_out)
         for eachNeuron in range(self.neurons_len):
             temp_delta=[]
@@ -184,13 +185,15 @@ class PerceptronsMultiLayer:
             find Delta using backpropagation
             """
             for eachNextLayersNeuron in range(nextLayer.neurons_len):
-                temp_delta.append(nextLayer.errortbl[eachNextLayersNeuron]*nextLayer.weights[eachNextLayersNeuron][eachNeuron])
-            temp_delta=np.array(temp_delta).sum()*(1-previous_layer_out)*previous_layer_out
+                temp_delta.append(nextLayer.errortbl[eachNextLayersNeuron]*prev_weights[eachNextLayersNeuron][eachNeuron])
+            temp_delta=calculated_result_table[eachNeuron]*(1-calculated_result_table[eachNeuron])*np.array(temp_delta).sum()
             #temp_delta=np.array(temp_delta).sum()
             correction = temp_delta*self.learn_rate
             self.errortbl.append(temp_delta)
             self.weights[eachNeuron]+=correction
-        return 1
+            print(eachNeuron)
+
+        return retval
 
 
 
