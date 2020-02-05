@@ -61,10 +61,12 @@ class NeuralNetwork:
             elif(everyLayer==0):#we are in the first layer , and the input is the networks input
                 a=10
                 prev_weights=(self.layers[everyLayer].middleAdjust(NeuralNetwork.normalisation(in_data), self.layers[everyLayer + 1],prev_weights,calculated_result[everyLayer]))
+
                 continue
 
             else:#middle train
                 prev_weights=(self.layers[everyLayer].middleAdjust(NeuralNetwork.normalisation(calculated_result[everyLayer-1]),self.layers[everyLayer+1],prev_weights,calculated_result[everyLayer]))
+
                 continue
 
         return 1
@@ -79,7 +81,7 @@ class NeuralNetwork:
 
 class PerceptronsMultiLayer:
 
-    def __init__(self, input_len,neurons_len, learn_rate,index:int,weights=None):
+    def __init__(self, input_len,neurons_len, learn_rate,momentum,index:int,weights=None):
         """
         The contructor
         intializes the nessary fields
@@ -89,14 +91,20 @@ class PerceptronsMultiLayer:
         """
         self.index=index
         self.learn_rate = learn_rate
+        self.momentum=momentum
         self.neurons_len=neurons_len
         self.input_len = input_len
+        self.prev_correction=[0]*self.neurons_len
         #self.weights = np.random.randint(0, 10, (neurons_len, input_len)) / 10
         if(weights is None):
             self.weights = np.random.randint(1, 2, (neurons_len, input_len+1)).astype(np.float)
         else:
             self.weights=weights
         self.errortbl=None
+
+    def roundWeights(self):
+        for i in range(self.neurons_len):
+            self.weights[i]=[np.round(x,4) for x in self.weights[i]]
 
 
 
@@ -156,10 +164,11 @@ class PerceptronsMultiLayer:
         calculated_result_table = np.array(calculated_result_table)
         self.errortbl= (target_result-calculated_result_table)*(1-calculated_result_table)*calculated_result_table
         for everyNode in range(self.neurons_len):
-            correction=previous_layer_out* self.errortbl[everyNode]*self.learn_rate
+            correction=previous_layer_out* self.errortbl[everyNode]*self.learn_rate + self.prev_correction[everyNode]*self.momentum
+            self.prev_correction[everyNode]=correction
             self.weights[everyNode]+=correction
 
-
+        self.roundWeights()
         return retval
 
     def middleAdjust(self,previous_layer_out,nextLayer,prev_weights,calculated_result_table):
@@ -187,11 +196,12 @@ class PerceptronsMultiLayer:
             for eachNextLayersNeuron in range(nextLayer.neurons_len):
                 temp_delta.append(nextLayer.errortbl[eachNextLayersNeuron]*prev_weights[eachNextLayersNeuron][eachNeuron])
             temp_delta=calculated_result_table[eachNeuron]*(1-calculated_result_table[eachNeuron])*np.array(temp_delta).sum()
-            #temp_delta=np.array(temp_delta).sum()
-            correction = previous_layer_out* temp_delta*self.learn_rate
+            correction = previous_layer_out* temp_delta*self.learn_rate + self.prev_correction[eachNeuron]*self.momentum
+            self.prev_correction[eachNeuron]=correction
             self.errortbl.append(temp_delta)
             self.weights[eachNeuron]+=correction
 
+        self.roundWeights()
         return retval
 
 
@@ -210,12 +220,12 @@ class PerceptronsMultiLayer:
         return self.errortbl
 """
 #remember , x3 is the bias! not x0
-p1 = PerceptronsMultiLayer(input_len=2, neurons_len=2, learn_rate=0.5,index=0,weights=np.array([[-0.1558,0.2829,0.8625],[-0.5060,-0.8644,0.8350]]).astype(np.float)) #remember , add bias manually
-p2 = PerceptronsMultiLayer(input_len=2, neurons_len=1, learn_rate=0.5,index=1,weights=np.array([[-0.4304,0.4812,0.0365]]).astype(np.float))
+p1 = PerceptronsMultiLayer(input_len=2, neurons_len=2, learn_rate=0.5,momentum=0.6,index=0,weights=np.array([[-0.1558,0.2829,0.8625],[-0.5060,-0.8644,0.8350]]).astype(np.float)) #remember , add bias manually
+p2 = PerceptronsMultiLayer(input_len=2, neurons_len=1, learn_rate=0.5,momentum=0.6,index=1,weights=np.array([[-0.4304,0.4812,0.0365]]).astype(np.float))
 network = [p1,p2]
 wrapper=NeuralNetwork(network)
 
-epochs=10000
+epochs=1000
 
 data=np.array([[0,0],[0,1],[1,0],[1,1]])
 target=np.array([[0],[1],[1],[0]])
@@ -223,6 +233,20 @@ target=np.array([[0],[1],[1],[0]])
 
 
 
+#r=wrapper(data[0])
+#wrapper.adjust(data[0],target[0],r)
+
+#r=wrapper(data[1])
+#wrapper.adjust(data[1],target[1],r)
+
+#r=wrapper(data[2])
+#wrapper.adjust(data[2],target[2],r)
+
+print(p1.weights)
+print("\n")
+print(p2.weights)
+
+#"""
 def step(x):
     return x
     if(x>0.5):return 1
@@ -242,4 +266,4 @@ for i in range(epochs):
 for eachDataset in range(len(data)):
     r = wrapper(data[eachDataset])
     print(step(r[-1][0]))
-
+#"""
