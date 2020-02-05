@@ -222,10 +222,13 @@ target=np.array([[0],[1],[1],[0]])
 
 
 
+
 def step(x):
     return x
     if(x>0.5):return 1
     return 0
+
+
 for eachDataset in range(len(data)):
     r = wrapper(data[eachDataset])
     print(step(r[-1][0]))
