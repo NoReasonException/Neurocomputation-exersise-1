@@ -2,20 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4439483b-3900-45dc-83fd-0e6dc78f9a6c" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/optimised-network/first.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/etc/k-classifier.py" beforeDir="false" afterPath="$PROJECT_DIR$/non-optimised-network/etc/k-classifier.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/etc/k-harmonic-classifier.py" beforeDir="false" afterPath="$PROJECT_DIR$/non-optimised-network/etc/k-harmonic-classifier.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/etc/machine-learning-from-scratch-1.py" beforeDir="false" afterPath="$PROJECT_DIR$/non-optimised-network/etc/machine-learning-from-scratch-1.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/etc/machine-learning-from-scratch-2-xor.py" beforeDir="false" afterPath="$PROJECT_DIR$/non-optimised-network/etc/machine-learning-from-scratch-2-xor.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/etc/machine-learning-from-scratch-3-mimic-function.py" beforeDir="false" afterPath="$PROJECT_DIR$/non-optimised-network/etc/machine-learning-from-scratch-3-mimic-function.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/etc/machine-learning-from-scratch-4-with-bias.py" beforeDir="false" afterPath="$PROJECT_DIR$/non-optimised-network/etc/machine-learning-from-scratch-4-with-bias.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/etc/machine-learning-from-scratch-5-multiple-perceptrons.py" beforeDir="false" afterPath="$PROJECT_DIR$/non-optimised-network/etc/machine-learning-from-scratch-5-multiple-perceptrons.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/etc/machine-learning-from-scratch-6-hidden-layers.py" beforeDir="false" afterPath="$PROJECT_DIR$/non-optimised-network/etc/machine-learning-from-scratch-6-hidden-layers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/etc/machine-learning-from-scratch-7-hidden-layers-with-bias.py" beforeDir="false" afterPath="$PROJECT_DIR$/non-optimised-network/etc/machine-learning-from-scratch-7-hidden-layers-with-bias.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/final-mine.py" beforeDir="false" afterPath="$PROJECT_DIR$/non-optimised-network/final-mine.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/machine-learning-from-scratch-8-hidden-layers-with-bias-sig.py" beforeDir="false" afterPath="$PROJECT_DIR$/non-optimised-network/machine-learning-from-scratch-8-hidden-layers-with-bias-sig.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/optimised-network/first.py" beforeDir="false" afterPath="$PROJECT_DIR$/optimised-network/first.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -343,7 +330,7 @@
       <workItem from="1580389136688" duration="14325000" />
       <workItem from="1580513869458" duration="4502000" />
       <workItem from="1582211575940" duration="3269000" />
-      <workItem from="1582222284527" duration="5927000" />
+      <workItem from="1582222284527" duration="6203000" />
     </task>
     <servers />
   </component>
@@ -441,7 +428,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/optimised-network/first.py</url>
-          <line>47</line>
+          <line>60</line>
           <option name="timeStamp" value="1" />
         </line-breakpoint>
       </breakpoints>

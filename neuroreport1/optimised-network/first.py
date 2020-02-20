@@ -33,12 +33,11 @@ class PerceptronsMultiLayer:
 
     @staticmethod
     def truncNormInit(input_len,output_len):
-        def truncated_normal(mean=0, sd=1, low=0, upp=10):
+        def truncated_normal(mean:float=0.0, sd:float=1.0, low:float=0.0, upp:float=10.0):
             return truncnorm(
                 (low - mean) / sd, (upp - mean) / sd, loc=mean, scale=sd)
-
         weights = np.random.randint(0, 1, (output_len, input_len))  # define
-        weights = [truncated_normal(0, 1,-1,1).rvs(len(x)) for x in weights]
+        weights = [truncated_normal(0, 1,(-1/math.sqrt(input_len)),1/math.sqrt(input_len)).rvs(len(x)) for x in weights]
         return np.array(weights)
 
 
