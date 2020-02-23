@@ -258,15 +258,15 @@ class PerceptronsMultiLayer:
 
 
 # remember , x3 is the bias! not x0
-p1 = PerceptronsMultiLayer(input_len=2, neurons_len=2, learn_rate=0.5, momentum=0.6, index=0,
+p1 = PerceptronsMultiLayer(input_len=2, neurons_len=2, learn_rate=0.5, momentum=0, index=0,
                            weights=np.array([[-0.1558, 0.2829, 0.8625], [-0.5060, -0.8644, 0.8350]]).astype(
                                np.float))  # remember , add bias manually
-p2 = PerceptronsMultiLayer(input_len=2, neurons_len=1, learn_rate=0.5, momentum=0.6, index=1,
+p2 = PerceptronsMultiLayer(input_len=2, neurons_len=1, learn_rate=0.5, momentum=0, index=1,
                            weights=np.array([[-0.4304, 0.4812, 0.0365]]).astype(np.float))
 network = [p1, p2]
 wrapper = NeuralNetwork(network)
 
-epochs = 1000
+epochs = 10000
 
 data = np.array([[0, 0], [0, 1], [1, 0], [1, 1]])
 target = np.array([[0], [1], [1], [0]])

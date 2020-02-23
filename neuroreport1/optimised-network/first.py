@@ -71,9 +71,10 @@ class PerceptronsMultiLayer:
         weights = [truncated_normal(0, 1,(-1/math.sqrt(input_len)),1/math.sqrt(input_len)).rvs(len(x)) for x in weights]
         return np.array(weights)
 
-    def __init__(self,index,input_len,output_len,activation,learning_rate,weights=None):
+    def __init__(self,index,input_len,output_len,activation,learning_rate,momentum,weights=None):
         self.index=index
         self.Delta=[]
+        self.correction=[]
         self.input_len=input_len
         self.output_len = output_len
         shape=(output_len,input_len+1)
@@ -96,12 +97,12 @@ class PerceptronsMultiLayer:
         return result.T
 
     def mid_learn(self,i,next_layer,o):
-        Wr_p_1=next_layer.weights
-        Dr_p_1=next_layer.Delta
-        self.Delta=Wr_p_1.T*Dr_p_1
-        self.Delta=self.Delta*(1-o)*o
-        self.Delta=i*self.Delta.T*self.learning_rate
-        self.weights+=self.Delta
+        Wr_p_1=next_layer.weights#reshapes
+        Dr_p_1=next_layer.Delta #reshapes
+        self.Delta=np.matmul(Wr_p_1.T[:-1],Dr_p_1)
+        self.Delta=self.Delta*(1.0-o)*o
+        correction=i*(self.Delta.T*self.learning_rate)
+        self.weights+=correction
 
 
 
@@ -113,26 +114,17 @@ class PerceptronsMultiLayer:
         self.weights+=correction
 
 
-"""
-def linear(sum):
-    return sum
-def sigmoid(sum):
-    return 1/(1+math.pow(math.e,-sum))
-def reLU(sum):
-    return max(0,sum)
-"""
-nIn = PerceptronsMultiLayer(0,2,2,sigmoid,0.4)
-nOut = PerceptronsMultiLayer(1,2,1,sigmoid,0.4)
+nIn = PerceptronsMultiLayer(0,2,2,sigmoid,0.5,0.6,weights=np.array([[-0.1558, 0.2829, 0.8625], [-0.5060, -0.8644, 0.8350]]))
+nOut = PerceptronsMultiLayer(1,2,1,sigmoid,0.5,0.6,weights=np.array([[-0.4304, 0.4812, 0.0365]]))
 network = [nIn,
            nOut]
 
 wrapper=NeuralNetwork(network)
 
 data=np.array([[0,0],[0,1],[1,0],[1,1]])
-#output=np.array([[0,0],[0,0],[0,0],[1,1]])
-output=np.array([[0],[0],[0],[1]])
+output=np.array([[0],[1],[1],[0]])
 
-epochs=5000
+epochs=10000
 """
 for i in range(epochs):
     for i in range(len(data)):
@@ -147,9 +139,11 @@ for i in range(epochs):
 for i in range(epochs):
     for i in range(len(data)):
         wrapper.adjust(data[i],output[i],wrapper(data[i]))
+        #nOut.term_learn(data[i],nOut(data[i]),output[i])
 
 
 print(wrapper(data[0])[-1])
 print(wrapper(data[1])[-1])
 print(wrapper(data[2])[-1])
 print(wrapper(data[3])[-1])
+
