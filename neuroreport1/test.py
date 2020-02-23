@@ -1,9 +1,5 @@
 import numpy as np
 
-
-def initMatrixes(input_len, output_len):
-    weights = np.random.randint(0, 1, (output_len, input_len))  # define
-    weights = [np.random.binomial(100, 0.5, len(x)) for x in weights]
-    print(np.array(weights)/100)
-
-initMatrixes(2,3)
+a=np.array([0.38,-0.52]).reshape((2,1))
+b=np.array([0.6,-0.5]).reshape((2,1))
+print(a*b)
