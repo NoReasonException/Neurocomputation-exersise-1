@@ -181,7 +181,7 @@ epochs = 10
 
 NN = NeuralNetwork(no_of_in_nodes=image_pixels,
                    no_of_out_nodes=10,
-                   no_of_hidden_nodes=256,
+                   no_of_hidden_nodes=512,
                    learning_rate=0.1)
 
 for epoch in range(epochs):
