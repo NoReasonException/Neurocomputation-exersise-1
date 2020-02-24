@@ -1,5 +1,6 @@
 import numpy as np
 
-a=np.array([0.38,-0.52]).reshape((2,1))
-b=np.array([0.6,-0.5]).reshape((2,1))
+a=np.array([[1,2,3,4]]).reshape(4,1)
+b=np.array([[1,0,1,0]]).reshape(4,1)
+
 print(a*b)

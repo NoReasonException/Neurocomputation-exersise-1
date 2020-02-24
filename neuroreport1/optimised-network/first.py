@@ -31,8 +31,8 @@ class NeuralNetwork:
         for everyLayer in range(len(self.layers) - 1, -1, -1):  # traverse the list on reverse
             if (everyLayer == len(self.layers) - 1):  # we are in the last layer
                 prev_weights = (self.layers[everyLayer].term_learn(
-                    NeuralNetwork.normalisation(calculated_result[everyLayer - 1]), target_result,
-                    calculated_result[everyLayer]))
+                    NeuralNetwork.normalisation(calculated_result[everyLayer - 1]),
+                    calculated_result[everyLayer], target_result))
 
             elif (everyLayer == 0):  # we are in the first layer , and the input is the networks input
                 prev_weights = (self.layers[everyLayer].mid_learn(NeuralNetwork.normalisation(in_data),
@@ -54,6 +54,9 @@ class NeuralNetwork:
 
 class PerceptronsMultiLayer:
 
+    def roundWeights(self):
+        for i in range(self.output_len):
+            self.weights[i] = [np.round(x, 4) for x in self.weights[i]]
 
 
     @staticmethod
@@ -96,23 +99,27 @@ class PerceptronsMultiLayer:
         result=sigmoid(sum)
         return result.T
 
-    def mid_learn(self,i,next_layer,o):
-        Wr_p_1=next_layer.weights#reshapes
-        Dr_p_1=next_layer.Delta #reshapes
-        self.Delta=np.matmul(Wr_p_1.T[:-1],Dr_p_1)
-        self.Delta=self.Delta*(1.0-o)*o
-        correction=i*(self.Delta.T*self.learning_rate)
-        self.weights+=correction
+    def mid_learn(self, i, next_layer, o):
+        Wr_p_1 = next_layer.weights
+        Dr_p_1 = next_layer.Delta
+        i=np.array(i).reshape(1,self.input_len+1)
+        o = np.append(o,1).reshape(self.output_len+1, 1)
+        self.Delta = np.matmul(Wr_p_1.T,Dr_p_1) * (1.0 - o) * o * self.learning_rate
+        correction = i * self.Delta
+        self.weights += correction[:-1]
+        self.roundWeights()
+        pass
 
 
 
     def term_learn(self, i, o, t):
         t=t.reshape(1,self.output_len)
         o=o.reshape(1, self.output_len)
-        self.Delta=np.array((t-o)*(1.0-o)*o)
+        self.Delta=np.array((t-o))
+        self.Delta=self.Delta*(1.0-o)*o
         correction=i*self.Delta.T*self.learning_rate
         self.weights+=correction
-
+        self.roundWeights()
 
 nIn = PerceptronsMultiLayer(0,2,2,sigmoid,0.5,0.6,weights=np.array([[-0.1558, 0.2829, 0.8625], [-0.5060, -0.8644, 0.8350]]))
 nOut = PerceptronsMultiLayer(1,2,1,sigmoid,0.5,0.6,weights=np.array([[-0.4304, 0.4812, 0.0365]]))
@@ -136,14 +143,17 @@ for i in range(epochs):
 
         nIn.mid_learn(data[i],nOut,mid_out)
 """
-for i in range(epochs):
-    for i in range(len(data)):
-        wrapper.adjust(data[i],output[i],wrapper(data[i]))
-        #nOut.term_learn(data[i],nOut(data[i]),output[i])
+for i in range(1):
+    for j in range(1):
+        wrapper.adjust(data[j],output[j],wrapper(data[j]))
 
+print(nIn.weights)
+print(nOut.weights)
 
+print("------------")
 print(wrapper(data[0])[-1])
 print(wrapper(data[1])[-1])
 print(wrapper(data[2])[-1])
 print(wrapper(data[3])[-1])
+
 
