@@ -1,6 +1,6 @@
 \documentclass{proc}
 
-\title{Exploring neural network optimisations using MNIST}
+\title{Exploring Neural Networks optimisations with an application in handwriting recognition engines}
 \author{Stefanos Stefanou(020363)}
 \usepackage[margin=0.3in]{geometry}
 \usepackage{amsmath}
@@ -36,10 +36,10 @@
 	\maketitle
 	\section{Abstract}
 	Multilayer Neural Networks trained using back-propagation algorithm are the best example of a successful
-	Gradient-Based learning technique. In this report, we will be going to explore an application of an MN N, handwritten pattern recognition. We will tune our MN N application to be able to handle efficiently the 90.000k+ samples of MNIST Databases, using basic linear algebra rules.
+	Gradient-Based learning technique. In this report, we will be going to explore an application of an MN N, handwritten pattern recognition. We will tune our MN N application to be able to handle efficiently the dozens of thousands of samples of MNIST Databases, using basic linear algebra rules.
 	\section{Introduction}
 	\subsection{Structure}
-	We have used an OOP approach to synthesize our solution, with 2 basic classes, NeuralNetwork and PerceptronMultilayer.NeuralNetwork class is a wrapper over multiple PerceptronMultilayer objects.it handles and supervises their learning by injecting them the proper data during learning.
+	We have used a minimal yet powerful OOP approach to synthesize our solution, with 2 basic classes, NeuralNetwork and PerceptronMultilayer. NeuralNetwork class is a wrapper over multiple PerceptronMultilayer objects.it handles and supervises their learning by injecting them the proper data during learning.
 	\subsection{The Algorithm}
 	To perform our experiments in a reasonable amount of time, a new approach was needed. so we we-wrote our Multilayer Neural Network engine, using matrix multiplications. this reduced the learning time significantly.
 	\subsubsection{Calculating a layer}
@@ -241,7 +241,7 @@ def mid_learn(self,i,next_layer,o):
   self.weights+=self.Delta
 	\end{lstlisting}
 	\subsection{Technologies}
-	In our application, we have used several new technologies to cope with the natural complexity of the given task. We completely rewrite our Multilayer Neural Network engine using python3.6, to have available the following tools available, as a result.
+	In our application, we have used several new technologies to cope with the natural complexity of the given task. We completely rewrote our Multilayer Neural Network engine using python3.6, to have available the following tools available, as a result.
 	\subsubsection{numpy}
 	NumPy is a mathematics library for python. It offers fast matrix multiplication and dot product implementations, vital for our approach in MN N's
 	\subsubsection{matplotlib}
@@ -312,8 +312,8 @@ def mid_learn(self,i,next_layer,o):
 	In order to ensure the optimal output, multiple experiments will be performed, using various Neuron and hidden layers configurations. As a common ground though, the following rules will be followed in every experiment.
 	
 	\begin{itemize}
-		\item Every pixel will become a free adjustable parameter, in the input layer
-		\item As handwritten digits is a purely categorical variable, the output layer will always consists of 10 Neurons, one for each category
+		\item Every pixel will become a free adjustable parameter, in the input layer. So its expected that the input layer will always consist of 784 nodes
+		\item As handwritten digits is a purely categorical variable, the output layer will always consists of 10 Neurons, one for each category(please refer to section 3.1.1)
 	\end{itemize}
 	
 	 
@@ -353,7 +353,7 @@ def mid_learn(self,i,next_layer,o):
 	\end{tikzpicture}
 	\section{Results}
 	\subsection{Accuracy criteria}
-	There are plenty of metrics for machine learning algorithms evaluation, we choose to evaluate our solution using the Test Error Rate. This choice will enable us to compare our solution with other researchers, please refer to the 'Comparison' section for more details
+	There are plenty of metrics for machine learning algorithms evaluation, we choose to evaluate our solution using the Test Error Rate. This choice will enable us to compare our results directly with other researchers(please refer to section 5)
 	
 	let the following confusion matrix
 	
@@ -378,9 +378,9 @@ def mid_learn(self,i,next_layer,o):
 		E = 1-A
 	\]
 	\subsection{Experiment setup}
-	In order to avoid over fitting, we apply a number of strategies. As Mark Twain once said, 'We should be careful to get out of an experience only the wisdom that is in it-and stop there'(From Following the Equator, 1897.)[4]
+	In order to avoid over-fitting, we apply a number of strategies. As Mark Twain once said, 'We should be careful to get out of an experience only the wisdom that is in it-and stop there'(From Following the Equator, 1897.)[4]
 	\subsubsection{Number of Neurons}
-	There is a common yet simple heuristic[4] for finding the maximum amount of neurons for a problem, without over fitting a model
+	There is a common yet simple heuristic[4] for finding the maximum amount of neurons ${N_h}$ for a problem, without over-fitting a model
 	\[
 		N_h = \frac{N_s} {(\alpha * (N_i + N_o))}	
 	\]
@@ -399,7 +399,7 @@ def mid_learn(self,i,next_layer,o):
 		\item 2 Hidden layers can approximate any smooth mapping to any accuracy(dangerous for overfitting in our classification problem)
 	\end{itemize} 
 	
-	An additional experiment with 2 hidden layers will be performed at the end, but with high generalisation constant, to avoid over fitting our model.
+	An additional experiment with 2 hidden layers will be performed at the end, but with high generalisation constant, to avoid over-fitting our model.
 	
 	\subsection{1 hidden layer Performance}
 	In the following graph, the average error rates of 50 runs are presented for various Generalization constants.
@@ -454,7 +454,7 @@ def mid_learn(self,i,next_layer,o):
 			Our results&1 Hidden& 9\% \\
 			Our results&1 Hidden& 10\% \\
 			LeCun et al.[5]&1 Hidden  & 12\% \\
-			LeCun et al.[6]&1 Hidden  & 8\% \\
+			LeCun et al.[5]&1 Hidden  & 8\% \\
 			\hline
 		\end{tabular}
 	\end{center}
@@ -467,8 +467,8 @@ def mid_learn(self,i,next_layer,o):
 			\hline
 			Our results&2 Hidden& 15\% \\
 			Our results&2 Hidden& 20\% \\
-			LeCun et al.[7]&2 Hidden  & 5\% \\
-			LeCun et al.[8]&2 Hidden  & 4\% \\
+			LeCun et al.[5]&2 Hidden  & 5\% \\
+			LeCun et al.[5]&2 Hidden  & 4\% \\
 			\hline
 		\end{tabular}
 	\end{center}
@@ -476,9 +476,9 @@ def mid_learn(self,i,next_layer,o):
 	This is something to be expected though, because our goal is to create a generalised model, under this circumstances, some compromises in performance need to be made
 	
 	\section{Discussion}
-	"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+	Our end goal is to create a tool for recognising hand written patterns, and possibly in the future(side/personal project) to generalise this solution to a full hand written recognition engine. We are taking extensive care of not over-fit our model, something that will prove catastrophic for our application. With this limitations in mind, as our first simplistic attempt, a few performance compromises needed to be made to ensure our models safety. Even with the most conservative settings though, our first results were interesting enough. We are making optimistic predictions that an updated version of this engine using convolutional neural networks will be able to exceed 98\% accuracy in the near future
 	\section{Conclusion}
-	"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+	At this stage our solution is capable for recognising isolated hand written digits with a maximum accuracy(within safety limits) of 92\%. It becomes evident that there is a lot of work to do to generalise successfully this solution, mainly due to segmentation problems(where a digit start and where ends?) but we are remaining optimistic about the near future.
 	\begin{thebibliography}{9}
 		\bibitem{isab1} 
 		Amari, Shun-ichi and Murata, Noboru and Müller, Klaus-Robert and Finke, Michael and Yang, Howard 
