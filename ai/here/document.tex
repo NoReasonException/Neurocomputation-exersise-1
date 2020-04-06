@@ -1,7 +1,7 @@
 \documentclass{proc}
 
-\title{Exploring Neural Networks optimisations with an application in handwriting recognition engines}
-\author{Stefanos Stefanou(020363)}
+\title{Exploring Neural Network optimisations with an application in handwritten recognition engines}
+\author{Stefanos Stefanou}
 \usepackage[margin=0.3in]{geometry}
 \usepackage{amsmath}
 \usepackage{tikz}
@@ -247,14 +247,14 @@ def mid_learn(self,i,next_layer,o):
 	\subsubsection{matplotlib}
 	Matplotlib is a plotting library for python, we used to visualize our data and results
 	\subsubsection{pickle}
-	Pickle is a python object serializer module, it offers fast de-serialization which is vital for our time-sensitive application.	
+	Pickle is a python object serialization module, it offers fast de-serialization which is vital for our time-sensitive application.	
 	\section{User Application}
 	The MNIST Database(Modified National Institute of Standards and Technology)consists of 60.000 train and 10.000 test examples of handwritten digits. It is a standardized test in machine learning and is used as a common ground for researches to compare their results.
 	
 	Our dataset is contained in 2 CSV files in which our training and testing data are included. Every line of these files consists of a 28x28 image, given as exactly 784 numbers, between 0(white pixel) and 255(black pixel). An additional number at the beginning of each line is for the numbers label.
 	\subsection{Preprocessing}
 	\subsubsection{Normalised Labels}
-	As our task involves classification, we need to convert our numerical labels to categorical ones, so we need to perform "Binarization" to MNIST's labels. We will use the one-hot representation. Each line of every CSV file starts with a number ${k[0<=k<=9]}$ witch will be converted in a 9x1 matrix as follows
+	As our task involves classification, we need to convert our numerical labels to categorical ones, so we need to perform "Binarization" to MNIST's labels. We will use the one-hot representation. Each line of every CSV file starts with a number ${k[0<=k<=9]}$ witch will be converted in a 1x9 matrix as follows
 	
 	\begin{center}
 		\begin{tabular}{ |c|c| } 
@@ -270,7 +270,7 @@ def mid_learn(self,i,next_layer,o):
 		\end{tabular}
 	\end{center}
 	\subsubsection{Normalised Pixels}
-	We will convert the default grayscale interval to a range [0,1], by dividing each pixel value with 255. At a first glance, this seems a nice solution for converting our data suitable for our MNN, but our experimentation revealed a fatal flaw, This technique allows, zero inputs, something that if occur can prevent the neuron from learning. We can solve this issue by applying the following transformation to every pixel.
+	We will convert the default greyscale interval to a range [0,1], by dividing each pixel value with 255. At a first glance, this seems a nice solution for converting our data suitable for our MNN, but our experimentation revealed a fatal flaw, This technique allows, zero inputs, something that if occur can prevent the neuron from learning. We can solve this issue by applying the following transformation to every pixel.
 	\[
 		f(x)=\frac{x*0.99}{255}+0.01
 	\]
@@ -396,10 +396,10 @@ def mid_learn(self,i,next_layer,o):
 	\begin{itemize}
 		\item 0 Hidden layers can learn only linear separable functions
 		\item 1 Hidden layers can approximate any function that contains a continuous mapping from one finite space to another
-		\item 2 Hidden layers can approximate any smooth mapping to any accuracy(dangerous for overfitting in our classification problem)
+		\item 2 Hidden layers can approximate any smooth mapping to any accuracy(dangerous for over-fitting in our classification problem)
 	\end{itemize} 
 	
-	An additional experiment with 2 hidden layers will be performed at the end, but with high generalisation constant, to avoid over-fitting our model.
+	An additional experiment with 2 hidden layers will be performed at the end, but with high generalization constant, to avoid over-fitting our model.
 	
 	\subsection{1 hidden layer Performance}
 	In the following graph, the average error rates of 50 runs are presented for various Generalization constants.
@@ -411,10 +411,11 @@ def mid_learn(self,i,next_layer,o):
 
 	As we are in 1 hidden layer, the probability of over-fitting is relatively small compared with 2 or more hidden layer configurations, so we choose our Generalisation constant $\alpha \in [3,6]$
 	
-	There is a clear and expected trade-off, as the model tends to generalise, the error rate rises significantly.
+	There is a clear and expected trade-off, as the model tends to generalize, the error rate rises significantly.
+
 	However it becomes evident that we can get a accurate enough classifier $(\sim 10\% $ T-Error) even with the most conservative settings(${a=4  || a=5}$)
 	\subsection{2 hidden layers Performance}
-	As we are in 2 hidden layer now, the probability of over-fitting is higher compared with 1 hidden layer configuration, so we choose a higher Generalisation constant  $\alpha \in [5,8]$
+	As we are in 2 hidden layers now, the probability of over-fitting is higher compared with 1 hidden layer configuration, so we choose a higher Generalisation constant  $\alpha \in [5,8]$
 	
 	In the following graph, the average error rates of 50 runs are presented for various Generalization constants within our predetermined range. Our setup uses the same amount of neurons in both hidden layers
 	
@@ -429,8 +430,7 @@ def mid_learn(self,i,next_layer,o):
 
 	\section{Comparison}
 	
-	After experimentation, based on our target to find the most accurate yet generalised model, we narrowed down our results to the following classifiers.
-	
+	After experimentation, based on our target to find the most accurate yet generalized model, we narrowed down our results to the following classifiers.
 	\begin{center}
 		\begin{tabular}{ |c|c|c| }
 			\hline
@@ -444,7 +444,7 @@ def mid_learn(self,i,next_layer,o):
 		\end{tabular}
 	\end{center}
 
-	MNIST Database contains a table with various research publications relating the MNIST task. Under the linear classifiers section, our results for 1-Hidden MNN are closely related with publication[5]
+    MNIST Database contains a table with various research publications relating to the MNIST task. Under the linear classifiers section, our results for 1-Hidden MNN are closely related to publication[5]
 	
 	\begin{center}
 		\begin{tabular}{ |c|c|c| }
@@ -459,7 +459,7 @@ def mid_learn(self,i,next_layer,o):
 		\end{tabular}
 	\end{center}
  
-	Our results for 2-Hidden MNN's are significantly lower with publication [5]
+	Our results for 2-Hidden MNN's are significantly lower yet relatable with publication [5]
 	\begin{center}
 		\begin{tabular}{ |c|c|c| }
 			\hline
@@ -473,12 +473,21 @@ def mid_learn(self,i,next_layer,o):
 		\end{tabular}
 	\end{center}
 
-	This is something to be expected though, because our goal is to create a generalised model, under this circumstances, some compromises in performance need to be made
-	
+    This is something to be expected though, because our goal is to create a generalized model. Under these circumstances, some compromises in performance need to be made
 	\section{Discussion}
-	Our end goal is to create a tool for recognising hand written patterns, and possibly in the future(side/personal project) to generalise this solution to a full hand written recognition engine. We are taking extensive care of not over-fit our model, something that will prove catastrophic for our application. With this limitations in mind, as our first simplistic attempt, a few performance compromises needed to be made to ensure our models safety. Even with the most conservative settings though, our first results were interesting enough. We are making optimistic predictions that an updated version of this engine using convolutional neural networks will be able to exceed 98\% accuracy in the near future
+    Our end goal is to create a tool for recognizing handwritten patterns and possibly in the future(side/personal project) to generalize this solution to a full handwritten recognition engine. We are taking extensive care of not over-fit our model, something that will prove catastrophic for our application. With these limitations in mind, as our first simplistic attempt, a few performance compromises needed to be made to ensure our models' safety. Even with the most conservative settings though, our first results were interesting enough. We are making optimistic predictions that an updated version of this engine using convolutional neural networks will be able to exceed 98\% accuracy in the near future
 	\section{Conclusion}
-	At this stage our solution is capable for recognising isolated hand written digits with a maximum accuracy(within safety limits) of 92\%. It becomes evident that there is a lot of work to do to generalise successfully this solution, mainly due to segmentation problems(where a digit start and where ends?) but we are remaining optimistic about the near future.
+    At this stage, our solution is capable of recognizing isolated handwritten digits with maximum accuracy(within safety limits) of 92\%. It becomes evident that there is a lot of work to do to generalize successfully this solution, mainly due to segmentation problems(where a digit start and where ends?) but we are remaining optimistic about the near future.
+	\section{Appendix:Useful Information}
+	\begin{itemize}
+		\item Module Code:CS2NC19
+		\item Assignment title:Neurocomputation conference paper 
+		\item Student Number: 27020363 
+		\item Finish Date : 25/02/2020
+		\item Hours spent :60+
+		\item Assigment evaluation:Excellent,Engaging,Interesting
+	\end{itemize}
+	
 	\begin{thebibliography}{9}
 		\bibitem{isab1} 
 		Amari, Shun-ichi and Murata, Noboru and Müller, Klaus-Robert and Finke, Michael and Yang, Howard 
